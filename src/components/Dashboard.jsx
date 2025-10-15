@@ -97,7 +97,7 @@ const Dashboard = () => {
       <Sidebar />
     <TopBar/>
       <div style={{ flex: 1, padding: "20px", marginRight: "500px" ,marginTop:"30px"}}>
-        <h1 style={{ marginBottom: "20px" }}>Dashboard</h1>
+        <h1 style={{ color:"#1e40af",marginBottom: "20px" }}>Dashboard</h1>
         {/* Stat Cards */}
         <div
           style={{
