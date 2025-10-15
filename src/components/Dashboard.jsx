@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./SideBar";
 import { jwtDecode } from "jwt-decode"; // ✅ correct import
+import TopBar from "./TopBar";
 
 const Dashboard = () => {
   const [tables, setTables] = useState([]);
@@ -94,8 +95,8 @@ const Dashboard = () => {
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
-
-      <div style={{ flex: 1, padding: "20px", marginRight: "500px" }}>
+    <TopBar/>
+      <div style={{ flex: 1, padding: "20px", marginRight: "500px" ,marginTop:"30px"}}>
         <h1 style={{ marginBottom: "20px" }}>Dashboard</h1>
         {/* Stat Cards */}
         <div
