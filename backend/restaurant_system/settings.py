@@ -31,7 +31,8 @@ ALLOWED_HOSTS = ["*"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000:8000",
-    "http://192.168.0.198:8000",  # if using network IP for React
+    "http://192.168.0.198:8000", 
+    "https://guileless-brioche-74783f.netlify.app/" # if using network IP for React
 ]
 
 # Application definition

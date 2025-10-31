@@ -11,7 +11,7 @@ const SignUp = () => {
     e.preventDefault(); // prevent page reload
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/signup/", {
+      const response = await fetch("https://restaurantsystem-h1t0.onrender.com/api/signup/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
