@@ -172,6 +172,20 @@ const SideBar = () => {
                   <FaBox style={iconStyle} /> Products
                 </Link>
               </li>
+               <li style={liStyle}>
+                <Link
+                  to="/Users"
+                  style={linkStyle}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = "#374151";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }}
+                >
+                  <FaBox style={iconStyle} /> Users
+                </Link>
+              </li>
             </ul>
           </>
         )}

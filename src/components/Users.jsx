@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import SideBar from './SideBar';
+import TopBar from './TopBar';
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -36,7 +38,10 @@ const Users = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div>
+    <div style={{display:"flex"}}>
+      <TopBar/>
+      <SideBar/>
+      <div style={{flex:1,marginRight:"200px",marginTop:"100px"}}>
       <h2>Users</h2>
       <table border="1" cellPadding="10">
         <thead>
@@ -56,6 +61,7 @@ const Users = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };

@@ -263,10 +263,11 @@ const Home = () => {
               backgroundColor: "#2563eb",
               color: "#fff",
               padding: "20px",
+              marginTop:"10px"
             }}
           >
             <h3
-              style={{ margin: "0", fontSize: "24px", fontWeight: "700" }}
+              style={{ margin: "0", fontSize: "24px", fontWeight: "700",marginTop:"20px" }}
             >
               🛒 Your Cart
             </h3>
@@ -281,6 +282,7 @@ const Home = () => {
                   fontWeight: "600",
                   color: "#374151",
                   marginBottom: "8px",
+                  
                 }}
               >
                 Select Table
