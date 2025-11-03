@@ -21,6 +21,8 @@ from api.views import ItemViewSet, OrderViewSet, signup,UserViewSet, TableViewSe
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from api.serializers import CustomTokenObtainPairSerializer
 from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 router = DefaultRouter()
 router.register(r'items', ItemViewSet)
@@ -29,6 +31,7 @@ router.register(r'users', UserViewSet, basename='users')  # <-- new route
 router.register(r'tables', TableViewSet, basename='table')
 
 
+@method_decorator(csrf_exempt, name='dispatch')
 class CustomTokenObtainPairView(TokenObtainPairView):
     def options(self, request, *args, **kwargs):
         response = JsonResponse({'detail': 'CORS preflight successful'})
