@@ -20,6 +20,7 @@ from rest_framework.routers import DefaultRouter
 from api.views import ItemViewSet, OrderViewSet, signup,UserViewSet, TableViewSet 
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from api.serializers import CustomTokenObtainPairSerializer
+from django.http import JsonResponse
 
 router = DefaultRouter()
 router.register(r'items', ItemViewSet)
@@ -29,6 +30,12 @@ router.register(r'tables', TableViewSet, basename='table')
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
+    def options(self, request, *args, **kwargs):
+        response = JsonResponse({'detail': 'CORS preflight successful'})
+        response["Access-Control-Allow-Origin"] = "*"
+        response["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        return response
     serializer_class = CustomTokenObtainPairSerializer
 
 urlpatterns = [
