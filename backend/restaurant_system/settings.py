@@ -30,10 +30,11 @@ DEBUG = True
 ALLOWED_HOSTS = ["*","restaurantsystem-4.onrender.com"]
 
 
-# CORS_ALLOWED_ORIGINS = [
-#     "https://restaurant-system-sandy.vercel.app"
-#     # "https://restromanagementsystem.netlify.app" # if using network IP for React
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "https://restaurant-system-sandy.vercel.app",
+    "https://restaurant-system-20dkfndek-vaishnavisheralas-projects.vercel.app/"
+    # "https://restromanagementsystem.netlify.app" # if using network IP for React
+]
 
 # Application definition
 
