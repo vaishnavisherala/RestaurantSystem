@@ -33,7 +33,7 @@ ALLOWED_HOSTS = ["*","restaurantsystem-4.onrender.com"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://192.168.0.198:8000", 
-    "https://restaurant-system-sandy.vercel.app/"
+    "https://restaurant-system-sandy.vercel.app"
     # "https://restromanagementsystem.netlify.app" # if using network IP for React
 ]
 
