@@ -33,7 +33,8 @@ ALLOWED_HOSTS = ["*","restaurantsystem-4.onrender.com"]
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://192.168.0.198:8000", 
-    "https://restromanagementsystem.netlify.app" # if using network IP for React
+    "https://restaurant-system-sandy.vercel.app/"
+    # "https://restromanagementsystem.netlify.app" # if using network IP for React
 ]
 
 # Application definition
@@ -55,10 +56,10 @@ CORS_ALLOW_CREDENTIALS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',   # <---- must be above CommonMiddleware
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -92,12 +93,16 @@ WSGI_APPLICATION = 'restaurant_system.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.getenv('DATABASE_URL'),
+#         conn_max_age=600,
+#         ssl_require=True
+#     )
+# }
+
 DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
-    )
+    'default': dj_database_url.config(conn_max_age=600)
 }
 
 
