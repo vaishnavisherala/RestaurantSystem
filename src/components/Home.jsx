@@ -61,10 +61,10 @@ const Home = () => {
     try {
       const token = localStorage.getItem("access");
       const [itemsRes, tablesRes] = await Promise.all([
-        fetch("http://192.168.0.198:8000/api/items/", {
+        fetch("https://restaurantsystem-4.onrender.com/api/items/", {
           headers: { Authorization: `Bearer ${token}` },
         }),
-        fetch("http://192.168.0.198:8000/api/tables/", {
+        fetch("https://restaurantsystem-4.onrender.com/api/tables/", {
           headers: { Authorization: `Bearer ${token}` },
         }),
       ]);
@@ -109,7 +109,7 @@ const Home = () => {
 
     try {
       const response = await fetch(
-        "http://192.168.0.198:8000/api/orders/place_order/",
+        "https://restaurantsystem-4.onrender.com/api/orders/place_order/",
         {
           method: "POST",
           headers: {

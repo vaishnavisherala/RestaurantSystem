@@ -21,7 +21,7 @@ const Orders = () => {
       const token = localStorage.getItem("access");
       if (!token) throw new Error("No token found");
 
-      const response = await fetch("http://192.168.0.198:8000/api/orders/", {
+      const response = await fetch("https://restaurantsystem-4.onrender.com/api/orders/", {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -67,7 +67,7 @@ const Orders = () => {
       if (!token) throw new Error("No token found");
 
       const response = await fetch(
-        `http://192.168.0.198:8000/api/orders/${orderId}/checkout/`,
+        `https://restaurantsystem-4.onrender.com/api/orders/${orderId}/checkout/`,
         {
           method: "POST",
           headers: {

@@ -12,7 +12,7 @@ const Users = () => {
       try {
         const token = localStorage.getItem('access'); // assume JWT stored in localStorage
         
-        const response = await fetch('http://192.168.0.198:8000/api/users/', {
+        const response = await fetch('https://restaurantsystem-4.onrender.com/api/users/', {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',

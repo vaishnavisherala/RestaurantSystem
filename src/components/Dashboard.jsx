@@ -21,7 +21,7 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         // Fetch Tables
-        const tablesRes = await fetch("https://restaurantsystem-h1t0.onrender.com/api/tables/", {
+        const tablesRes = await fetch("https://restaurantsystem-4.onrender.com/api/tables/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const tablesData = await tablesRes.json();
