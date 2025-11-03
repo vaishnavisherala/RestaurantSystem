@@ -27,14 +27,14 @@ SECRET_KEY = 'django-insecure-uhmx(3w%m0)$615zak@d_#2lllv_+snq#ow^he$^ylq&820d3m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*",'restaurantsystem-4.onrender.com']
+ALLOWED_HOSTS = ["*","restaurantsystem-4.onrender.com"]
 
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000:8000",
     "http://192.168.0.198:8000", 
-    "https://restaurantsystem-4.onrender.com"
+    "https://restaurantsystem-4.onrender.com",
     "https://restromanagementsystem.netlify.app" # if using network IP for React
 ]
 
