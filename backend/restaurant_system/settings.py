@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
+import dj_database_url
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,13 +27,14 @@ SECRET_KEY = 'django-insecure-uhmx(3w%m0)$615zak@d_#2lllv_+snq#ow^he$^ylq&820d3m
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*",'restaurantsystem-4.onrender.com']
 
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000:8000",
     "http://192.168.0.198:8000", 
+    "https://restaurantsystem-4.onrender.com"
     "https://restromanagementsystem.netlify.app" # if using network IP for React
 ]
 
@@ -92,14 +95,11 @@ WSGI_APPLICATION = 'restaurant_system.wsgi.application'
 
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'restaurant_db',     # your database name
-        'USER': 'postgres',          # your PostgreSQL username
-        'PASSWORD': 'Vaishnavi@766',  # your PostgreSQL password
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 
