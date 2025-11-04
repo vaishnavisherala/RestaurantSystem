@@ -41,7 +41,7 @@ const SignUp = () => {
       setEmail("");
       setPassword("");
 
-      navigate("/login");
+      navigate("/");
     } catch (err) {
       console.error("Signup failed:", err);
       alert(`❌ ${err.message}`);
