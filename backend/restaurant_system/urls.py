@@ -23,6 +23,7 @@ from api.serializers import CustomTokenObtainPairSerializer
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.contrib.auth import get_user_model
 
 router = DefaultRouter()
 router.register(r'items', ItemViewSet)
@@ -31,6 +32,14 @@ router.register(r'users', UserViewSet, basename='users')  # <-- new route
 router.register(r'tables', TableViewSet, basename='table')
 
 
+def create_admin(request):
+    User = get_user_model()
+    if not User.objects.filter(username="admin").exists():
+        User.objects.create_superuser("admin", "admin@example.com", "admin123")
+        return JsonResponse({"status": "Superuser created", "username": "admin", "password": "admin123"})
+    else:
+        return JsonResponse({"status": "Admin already exists"})
+    
 @method_decorator(csrf_exempt, name='dispatch')
 class CustomTokenObtainPairView(TokenObtainPairView):
     def options(self, request, *args, **kwargs):
@@ -47,5 +56,6 @@ urlpatterns = [
     path('api/signup/', signup, name='signup'),  # <-- Signup URL
     path('api/token/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('create-admin/', create_admin)
 ]
 
