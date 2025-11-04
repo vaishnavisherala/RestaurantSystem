@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "./SideBar";
-import { jwtDecode } from "jwt-decode"; // ✅ correct import
 import TopBar from "./TopBar";
+import { jwtDecode } from "jwt-decode";
 
 const Dashboard = () => {
   const [tables, setTables] = useState([]);
@@ -12,7 +12,10 @@ const Dashboard = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("access");
-    if (!token) return;
+    if (!token) {
+      setLoading(false);
+      return;
+    }
 
     const decoded = jwtDecode(token);
     const username = decoded.username || decoded.user || decoded.sub;
@@ -20,27 +23,27 @@ const Dashboard = () => {
 
     const fetchData = async () => {
       try {
-        // Fetch Tables
-        const tablesRes = await fetch("https://restaurantsystem-4.onrender.com/api/tables/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const baseURL = "https://restaurantsystem-4.onrender.com/api";
+
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
+        // --- Fetch Tables ---
+        const tablesRes = await fetch(`${baseURL}/tables/`, { headers });
         const tablesData = await tablesRes.json();
         setTables(Array.isArray(tablesData) ? tablesData : tablesData.results || []);
 
-        // Fetch Orders
-        const ordersRes = await fetch("https://restaurantsystem-4.onrender.com/api/orders/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // --- Fetch Orders ---
+        const ordersRes = await fetch(`${baseURL}/orders/`, { headers });
         const ordersData = await ordersRes.json();
         setOrders(Array.isArray(ordersData) ? ordersData : ordersData.results || []);
 
-        // Fetch Users to confirm SuperAdmin
-        const userRes = await fetch("https://restaurantsystem-4.onrender.com/api/users/", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        if (userRes.ok) {
-          const userData = await userRes.json();
+        // --- Fetch Users (to check if current user is SuperAdmin) ---
+        const usersRes = await fetch(`${baseURL}/users/`, { headers });
+        if (usersRes.ok) {
+          const userData = await usersRes.json();
           const userArray = Array.isArray(userData) ? userData : [userData];
           setUsers(userArray);
 
@@ -50,9 +53,9 @@ const Dashboard = () => {
           setIsSuperAdmin(false);
         }
 
-        setLoading(false);
-      } catch (err) {
-        console.error("Dashboard load error:", err);
+      } catch (error) {
+        console.error("❌ Dashboard load error:", error);
+      } finally {
         setLoading(false);
       }
     };
@@ -60,11 +63,20 @@ const Dashboard = () => {
     fetchData();
   }, []);
 
-  if (loading) return <p>Loading dashboard...</p>;
+  if (loading) {
+    return <p style={{ textAlign: "center", marginTop: "150px" }}>Loading dashboard...</p>;
+  }
 
   if (!isSuperAdmin) {
     return (
-      <div style={{ textAlign: "center", marginTop: "150px", fontSize: "20px", color: "red" }}>
+      <div
+        style={{
+          textAlign: "center",
+          marginTop: "150px",
+          fontSize: "20px",
+          color: "red",
+        }}
+      >
         ❌ Access Denied — SuperAdmin Only
       </div>
     );
@@ -91,17 +103,16 @@ const Dashboard = () => {
     .filter((o) => !o.table)
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-  // --- RETURN UI ---
   return (
     <div style={{ display: "flex", minHeight: "100vh" }}>
       <Sidebar />
-    <TopBar/>
-      <div style={{ flex: 1, padding: "20px", marginRight: "500px" ,marginTop:"30px"}}>
-        <h1 style={{ color:"#1e40af",marginBottom: "20px" }}>Dashboard</h1>
-        {/* Stat Cards */}
+      <TopBar />
+      <div style={{ flex: 1, padding: "20px", marginTop: "30px" }}>
+        <h1 style={{ color: "#1e40af", marginBottom: "20px" }}>Dashboard</h1>
+
+        {/* --- Stat Cards --- */}
         <div
           style={{
-            width: "1000px",
             display: "flex",
             gap: "20px",
             flexWrap: "wrap",
@@ -127,95 +138,71 @@ const Dashboard = () => {
           ))}
         </div>
 
-        
-        {/* All In-Place Orders */}
+        {/* --- In-Place Orders --- */}
         <h2>In-Place Orders</h2>
         <div style={{ overflowX: "auto", marginBottom: "30px" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}
-          >
+          <table style={tableStyle}>
             <thead style={{ backgroundColor: "#f3f4f6" }}>
               <tr>
-                <th style={{ padding: "10px" }}>Order ID</th>
-                <th style={{ padding: "10px" }}>Client</th>
-                <th style={{ padding: "10px" }}>Table</th>
-                <th style={{ padding: "10px" }}>Total</th>
+                <th>Order ID</th>
+                <th>Client</th>
+                <th>Table</th>
+                <th>Total</th>
               </tr>
             </thead>
             <tbody>
               {latestInPlaceOrders.map((o) => (
-                <tr key={o.id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                  <td style={{ padding: "10px" }}>{o.id}</td>
-                  <td style={{ padding: "10px" }}>
-                    {typeof o.user === "object" ? o.user.username : o.user}
-                  </td>
-                  <td style={{ padding: "10px" }}>{o.table?.number || "N/A"}</td>
-                  <td style={{ padding: "10px" }}> {Number(o.total_price || 0).toFixed(2)}</td>
+                <tr key={o.id}>
+                  <td>{o.id}</td>
+                  <td>{typeof o.user === "object" ? o.user.username : o.user}</td>
+                  <td>{o.table?.number || "N/A"}</td>
+                  <td>{Number(o.total_price || 0).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-        {/* All Delivery Orders */}
+        {/* --- Delivery Orders --- */}
         <h2>Delivery Orders</h2>
         <div style={{ overflowX: "auto", marginBottom: "30px" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}
-          >
+          <table style={tableStyle}>
             <thead style={{ backgroundColor: "#f3f4f6" }}>
               <tr>
-                <th style={{ padding: "10px" }}>Order ID</th>
-                <th style={{ padding: "10px" }}>Client</th>
-                <th style={{ padding: "10px" }}>Total</th>
+                <th>Order ID</th>
+                <th>Client</th>
+                <th>Total</th>
               </tr>
             </thead>
             <tbody>
               {latestDeliveryOrders.map((o) => (
-                <tr key={o.id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                  <td style={{ padding: "10px" }}>{o.id}</td>
-                  <td style={{ padding: "10px" }}>
-                    {typeof o.user === "object" ? o.user.username : o.user}
-                  </td>
-                  <td style={{ padding: "10px" }}> {Number(o.total_price || 0).toFixed(2)}</td>
+                <tr key={o.id}>
+                  <td>{o.id}</td>
+                  <td>{typeof o.user === "object" ? o.user.username : o.user}</td>
+                  <td>{Number(o.total_price || 0).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
 
-
-        {/* Users Table */}
+        {/* --- Users Table --- */}
         <h2>Users</h2>
         <div style={{ overflowX: "auto", marginBottom: "30px" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}
-          >
+          <table style={tableStyle}>
             <thead style={{ backgroundColor: "#f3f4f6" }}>
               <tr>
-                <th style={{ padding: "10px" }}>ID</th>
-                <th style={{ padding: "10px" }}>Username</th>
-                <th style={{ padding: "10px" }}>Email</th>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
               </tr>
             </thead>
             <tbody>
               {users.map((u) => (
-                <tr key={u.id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                  <td style={{ padding: "10px" }}>{u.id}</td>
-                  <td style={{ padding: "10px" }}>{u.username}</td>
-                  <td style={{ padding: "10px" }}>{u.email}</td>
+                <tr key={u.id}>
+                  <td>{u.id}</td>
+                  <td>{u.username}</td>
+                  <td>{u.email}</td>
                 </tr>
               ))}
             </tbody>
@@ -224,6 +211,12 @@ const Dashboard = () => {
       </div>
     </div>
   );
+};
+
+const tableStyle = {
+  width: "100%",
+  borderCollapse: "collapse",
+  boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
 };
 
 export default Dashboard;
