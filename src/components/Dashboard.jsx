@@ -93,18 +93,25 @@ const Dashboard = () => {
 
   // --- RETURN UI ---
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div style={{ display: "flex", minHeight: "100vh", backgroundColor: "#f9fafb" }}>
+    {/* --- Sidebar --- */}
+    <div style={{ width: "250px", flexShrink: 0 }}>
       <Sidebar />
-    <TopBar/>
-      <div style={{ flex: 1, padding: "20px", marginRight: "500px" ,marginTop:"30px"}}>
-        <h1 style={{ color:"#1e40af",marginBottom: "20px" }}>Dashboard</h1>
-        {/* Stat Cards */}
+    </div>
+
+    {/* --- Main Content --- */}
+    <div style={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
+      <TopBar />
+
+      <main style={{ flex: 1, padding: "30px" }}>
+        <h1 style={{ color: "#1e40af", marginBottom: "20px", fontSize: "28px" }}>Dashboard</h1>
+
+        {/* --- Stat Cards --- */}
         <div
           style={{
-            width: "1000px",
-            display: "flex",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
             gap: "20px",
-            flexWrap: "wrap",
             marginBottom: "30px",
           }}
         >
@@ -112,117 +119,106 @@ const Dashboard = () => {
             <div
               key={card.title}
               style={{
-                flex: "1 1 calc(25% - 20px)",
                 backgroundColor: card.color,
                 color: "#fff",
                 padding: "20px",
-                borderRadius: "10px",
+                borderRadius: "12px",
                 textAlign: "center",
                 boxShadow: "0 2px 6px rgba(0,0,0,0.15)",
               }}
             >
-              <h3 style={{ margin: "0 0 10px 0" }}>{card.value}</h3>
-              <p style={{ margin: 0 }}>{card.title}</p>
+              <h2 style={{ margin: "0 0 10px 0", fontSize: "24px" }}>{card.value}</h2>
+              <p style={{ margin: 0, fontSize: "14px" }}>{card.title}</p>
             </div>
           ))}
         </div>
 
-        
-        {/* All In-Place Orders */}
-        <h2>In-Place Orders</h2>
-        <div style={{ overflowX: "auto", marginBottom: "30px" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}
-          >
-            <thead style={{ backgroundColor: "#f3f4f6" }}>
-              <tr>
-                <th style={{ padding: "10px" }}>Order ID</th>
-                <th style={{ padding: "10px" }}>Client</th>
-                <th style={{ padding: "10px" }}>Table</th>
-                <th style={{ padding: "10px" }}>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {latestInPlaceOrders.map((o) => (
-                <tr key={o.id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                  <td style={{ padding: "10px" }}>{o.id}</td>
-                  <td style={{ padding: "10px" }}>
-                    {typeof o.user === "object" ? o.user.username : o.user}
-                  </td>
-                  <td style={{ padding: "10px" }}>{o.table?.number || "N/A"}</td>
-                  <td style={{ padding: "10px" }}> {Number(o.total_price || 0).toFixed(2)}</td>
+        {/* --- In-Place Orders --- */}
+        <h2 style={{ color: "#1e40af" }}>In-Place Orders</h2>
+        {latestInPlaceOrders.length > 0 ? (
+          <div style={{ overflowX: "auto", marginBottom: "30px" }}>
+            <table style={tableStyle}>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Client</th>
+                  <th>Table</th>
+                  <th>Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {latestInPlaceOrders.map((o) => (
+                  <tr key={o.id}>
+                    <td>{o.id}</td>
+                    <td>{typeof o.user === "object" ? o.user.username : o.user}</td>
+                    <td>{o.table?.number || "N/A"}</td>
+                    <td>{Number(o.total_price || 0).toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p style={{ color: "#6b7280" }}>No in-place orders found.</p>
+        )}
 
-        {/* All Delivery Orders */}
-        <h2>Delivery Orders</h2>
-        <div style={{ overflowX: "auto", marginBottom: "30px" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}
-          >
-            <thead style={{ backgroundColor: "#f3f4f6" }}>
-              <tr>
-                <th style={{ padding: "10px" }}>Order ID</th>
-                <th style={{ padding: "10px" }}>Client</th>
-                <th style={{ padding: "10px" }}>Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {latestDeliveryOrders.map((o) => (
-                <tr key={o.id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                  <td style={{ padding: "10px" }}>{o.id}</td>
-                  <td style={{ padding: "10px" }}>
-                    {typeof o.user === "object" ? o.user.username : o.user}
-                  </td>
-                  <td style={{ padding: "10px" }}> {Number(o.total_price || 0).toFixed(2)}</td>
+        {/* --- Delivery Orders --- */}
+        <h2 style={{ color: "#1e40af" }}>Delivery Orders</h2>
+        {latestDeliveryOrders.length > 0 ? (
+          <div style={{ overflowX: "auto", marginBottom: "30px" }}>
+            <table style={tableStyle}>
+              <thead>
+                <tr>
+                  <th>Order ID</th>
+                  <th>Client</th>
+                  <th>Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {latestDeliveryOrders.map((o) => (
+                  <tr key={o.id}>
+                    <td>{o.id}</td>
+                    <td>{typeof o.user === "object" ? o.user.username : o.user}</td>
+                    <td>{Number(o.total_price || 0).toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p style={{ color: "#6b7280" }}>No delivery orders found.</p>
+        )}
 
-
-        {/* Users Table */}
-        <h2>Users</h2>
-        <div style={{ overflowX: "auto", marginBottom: "30px" }}>
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
-            }}
-          >
-            <thead style={{ backgroundColor: "#f3f4f6" }}>
-              <tr>
-                <th style={{ padding: "10px" }}>ID</th>
-                <th style={{ padding: "10px" }}>Username</th>
-                <th style={{ padding: "10px" }}>Email</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((u) => (
-                <tr key={u.id} style={{ borderBottom: "1px solid #e5e7eb" }}>
-                  <td style={{ padding: "10px" }}>{u.id}</td>
-                  <td style={{ padding: "10px" }}>{u.username}</td>
-                  <td style={{ padding: "10px" }}>{u.email}</td>
+        {/* --- Users --- */}
+        <h2 style={{ color: "#1e40af" }}>Users</h2>
+        {users.length > 0 ? (
+          <div style={{ overflowX: "auto", marginBottom: "30px" }}>
+            <table style={tableStyle}>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Username</th>
+                  <th>Email</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+              </thead>
+              <tbody>
+                {users.map((u) => (
+                  <tr key={u.id}>
+                    <td>{u.id}</td>
+                    <td>{u.username}</td>
+                    <td>{u.email}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p style={{ color: "#6b7280" }}>No users found.</p>
+        )}
+      </main>
     </div>
+  </div>
+
   );
 };
 
