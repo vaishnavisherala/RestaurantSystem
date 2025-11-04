@@ -28,14 +28,14 @@ const Dashboard = () => {
         setTables(Array.isArray(tablesData) ? tablesData : tablesData.results || []);
 
         // Fetch Orders
-        const ordersRes = await fetch("http://192.168.0.198:8000/api/orders/", {
+        const ordersRes = await fetch("https://restaurantsystem-4.onrender.com/api/orders/", {
           headers: { Authorization: `Bearer ${token}` },
         });
         const ordersData = await ordersRes.json();
         setOrders(Array.isArray(ordersData) ? ordersData : ordersData.results || []);
 
         // Fetch Users to confirm SuperAdmin
-        const userRes = await fetch("http://192.168.0.198:8000/api/users/", {
+        const userRes = await fetch("https://restaurantsystem-4.onrender.com/api/users/", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
